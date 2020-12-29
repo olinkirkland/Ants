@@ -1,7 +1,44 @@
 <?xml version="1.0"?>
-<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark">
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" applicationComplete="onApplicationComplete(event)" showStatusBar="false">
     <fx:Script><![CDATA[
-        import mx.controls.Alert;
+        import global.Color;
+        import global.Rand;
+
+        import mx.core.UIComponent;
+        import mx.events.FlexEvent;
+
+        // Model
+        private var map:Map;
+
+        // Graphics
+        private var layerNodes:UIComponent;
+
+        private function onApplicationComplete(event:FlexEvent):void {
+            Rand.rand = new Rand(1);
+
+            layerNodes = new UIComponent();
+            addElement(layerNodes);
+
+            map = new Map();
+
+            draw();
+        }
+
+        private function draw():void {
+            for each (var node:Node in map.nodes) {
+                var color:uint = Color.getRandomColor();
+
+                var spr:Sprite = new Sprite();
+                spr.graphics.beginFill(color);
+                spr.graphics.drawCircle(node.point.x, node.point.y, 2);
+                spr.graphics.endFill();
+                spr.graphics.lineStyle(1, color);
+                spr.graphics.drawCircle(node.point.x, node.point.y, 4)
+                layerNodes.addChild(spr);
+            }
+        }
         ]]></fx:Script>
-    <s:Button click="Alert.show('Hello, world')" label="Say Hello"/>
+
+
+
 </s:WindowedApplication>
